@@ -1,0 +1,35 @@
+services:
+  traefik:
+    image: traefik:v2.5
+    command: 
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  
+  user:
+    build: .
+    environment:
+      - ENDPOINT=user
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.user.rule=Host(`user.localhost`)"
+      - "traefik.http.services.user.loadbalancer.server.port=80"
+    
+  product:
+    build: .
+    environment:
+      - ENDPOINT=product
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.product.rule=Host(`product.localhost`)"
+      - "traefik.http.services.product.loadbalancer.server.port=80"
+  
+networks:
+  traefik_network:
+    external: true

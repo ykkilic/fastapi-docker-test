@@ -1,0 +1,2 @@
+-Docker compose dosyasında her endpoint için ayrı ayrı container tanımladım
+-Her endpoint farklı bir containerda çalışıyor. Docker içinde ki bu ağ trafiğini yönetmek için traefik isimli docker imajını kullandım
